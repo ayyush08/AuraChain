@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-aurachain = "JAVuBXeBZqXNtS73azhBDAoYaaAFfo4gWXoZe2e7Jf8H"
+aurachain = "71AHpFUaCzauR7qZkwYLSCjsj8R6fwhBLLmoG4UKLZ9j"
 
 [registry]
 url = "https://api.apr.dev"
@@ -16,4 +16,4 @@ cluster = "localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
-test = "vitest"
+test = "node_modules/.bin/jest --preset ts-jest"

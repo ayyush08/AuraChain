@@ -1,5 +1,5 @@
 {
-  "address": "JAVuBXeBZqXNtS73azhBDAoYaaAFfo4gWXoZe2e7Jf8H",
+  "address": "71AHpFUaCzauR7qZkwYLSCjsj8R6fwhBLLmoG4UKLZ9j",
   "metadata": {
     "name": "aurachain",
     "version": "0.1.0",
@@ -8,10 +8,233 @@
   },
   "instructions": [
     {
-      "name": "greet",
-      "discriminator": [203, 194, 3, 150, 228, 58, 181, 62],
-      "accounts": [],
-      "args": []
+      "name": "decrease_aura",
+      "discriminator": [
+        117,
+        2,
+        50,
+        109,
+        57,
+        162,
+        96,
+        7
+      ],
+      "accounts": [
+        {
+          "name": "aura_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  117,
+                  114,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "increase_aura",
+      "discriminator": [
+        59,
+        15,
+        155,
+        251,
+        37,
+        233,
+        54,
+        151
+      ],
+      "accounts": [
+        {
+          "name": "aura_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  117,
+                  114,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize",
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "aura_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  117,
+                  114,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "username",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "AuraAccount",
+      "discriminator": [
+        144,
+        174,
+        173,
+        138,
+        14,
+        15,
+        48,
+        139
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "UsernameTooLong",
+      "msg": "Username too long"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidAmount",
+      "msg": "Amount must be greater than zero"
+    },
+    {
+      "code": 6002,
+      "name": "SelfAuraNotAllowed",
+      "msg": "You cannot increase/decrease your own aura"
+    },
+    {
+      "code": 6003,
+      "name": "MathError",
+      "msg": "Overflow or underflow detected"
+    },
+    {
+      "code": 6004,
+      "name": "Unauthorized",
+      "msg": "You are not authorized to perform this action."
+    },
+    {
+      "code": 6005,
+      "name": "InvalidAuraAmount",
+      "msg": "Invalid aura amount."
+    },
+    {
+      "code": 6006,
+      "name": "Overflow",
+      "msg": "Overflow occurred while updating aura."
+    },
+    {
+      "code": 6007,
+      "name": "InsufficientAura",
+      "msg": "Not enough aura points."
+    },
+    {
+      "code": 6008,
+      "name": "UsernameAlreadyClaimed",
+      "msg": "Username already claimed."
+    }
+  ],
+  "types": [
+    {
+      "name": "AuraAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "aura_points",
+            "type": "u64"
+          }
+        ]
+      }
     }
   ]
 }

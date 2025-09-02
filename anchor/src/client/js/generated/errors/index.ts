@@ -6,6 +6,4 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './decreaseAura';
-export * from './increaseAura';
-export * from './initialize';
+export * from './aurachain';

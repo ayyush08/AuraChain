@@ -13,13 +13,55 @@ import {
   type Address,
   type ReadonlyUint8Array,
 } from 'gill';
-import { type ParsedGreetInstruction } from '../instructions';
+import {
+  type ParsedDecreaseAuraInstruction,
+  type ParsedIncreaseAuraInstruction,
+  type ParsedInitializeInstruction,
+} from '../instructions';
 
 export const AURACHAIN_PROGRAM_ADDRESS =
   'JAVuBXeBZqXNtS73azhBDAoYaaAFfo4gWXoZe2e7Jf8H' as Address<'JAVuBXeBZqXNtS73azhBDAoYaaAFfo4gWXoZe2e7Jf8H'>;
 
+export enum AurachainAccount {
+  AuraAccount,
+  UsernameRegistry,
+}
+
+export function identifyAurachainAccount(
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+): AurachainAccount {
+  const data = 'data' in account ? account.data : account;
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([144, 174, 173, 138, 14, 15, 48, 139])
+      ),
+      0
+    )
+  ) {
+    return AurachainAccount.AuraAccount;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([145, 217, 207, 126, 35, 114, 138, 18])
+      ),
+      0
+    )
+  ) {
+    return AurachainAccount.UsernameRegistry;
+  }
+  throw new Error(
+    'The provided account could not be identified as a aurachain account.'
+  );
+}
+
 export enum AurachainInstruction {
-  Greet,
+  DecreaseAura,
+  IncreaseAura,
+  Initialize,
 }
 
 export function identifyAurachainInstruction(
@@ -30,12 +72,34 @@ export function identifyAurachainInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([203, 194, 3, 150, 228, 58, 181, 62])
+        new Uint8Array([117, 2, 50, 109, 57, 162, 96, 7])
       ),
       0
     )
   ) {
-    return AurachainInstruction.Greet;
+    return AurachainInstruction.DecreaseAura;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([59, 15, 155, 251, 37, 233, 54, 151])
+      ),
+      0
+    )
+  ) {
+    return AurachainInstruction.IncreaseAura;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([175, 175, 109, 31, 13, 152, 155, 237])
+      ),
+      0
+    )
+  ) {
+    return AurachainInstruction.Initialize;
   }
   throw new Error(
     'The provided instruction could not be identified as a aurachain instruction.'
@@ -44,6 +108,13 @@ export function identifyAurachainInstruction(
 
 export type ParsedAurachainInstruction<
   TProgram extends string = 'JAVuBXeBZqXNtS73azhBDAoYaaAFfo4gWXoZe2e7Jf8H',
-> = {
-  instructionType: AurachainInstruction.Greet;
-} & ParsedGreetInstruction<TProgram>;
+> =
+  | ({
+      instructionType: AurachainInstruction.DecreaseAura;
+    } & ParsedDecreaseAuraInstruction<TProgram>)
+  | ({
+      instructionType: AurachainInstruction.IncreaseAura;
+    } & ParsedIncreaseAuraInstruction<TProgram>)
+  | ({
+      instructionType: AurachainInstruction.Initialize;
+    } & ParsedInitializeInstruction<TProgram>);
