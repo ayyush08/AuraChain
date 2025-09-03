@@ -20,7 +20,7 @@ import {
 } from '../instructions';
 
 export const AURACHAIN_PROGRAM_ADDRESS =
-  '71AHpFUaCzauR7qZkwYLSCjsj8R6fwhBLLmoG4UKLZ9j' as Address<'71AHpFUaCzauR7qZkwYLSCjsj8R6fwhBLLmoG4UKLZ9j'>;
+  '8VdwhnxhGCYkKv38VGBMAWxxnz5r2Yp1s41fqCbxps5S' as Address<'8VdwhnxhGCYkKv38VGBMAWxxnz5r2Yp1s41fqCbxps5S'>;
 
 export enum AurachainAccount {
   AuraAccount,
@@ -95,7 +95,7 @@ export function identifyAurachainInstruction(
 }
 
 export type ParsedAurachainInstruction<
-  TProgram extends string = '71AHpFUaCzauR7qZkwYLSCjsj8R6fwhBLLmoG4UKLZ9j',
+  TProgram extends string = '8VdwhnxhGCYkKv38VGBMAWxxnz5r2Yp1s41fqCbxps5S',
 > =
   | ({
       instructionType: AurachainInstruction.DecreaseAura;

@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/aurachain.json`.
  */
 export type Aurachain = {
-  "address": "71AHpFUaCzauR7qZkwYLSCjsj8R6fwhBLLmoG4UKLZ9j",
+  "address": "8VdwhnxhGCYkKv38VGBMAWxxnz5r2Yp1s41fqCbxps5S",
   "metadata": {
     "name": "aurachain",
     "version": "0.1.0",
