@@ -24,7 +24,7 @@ export function useGetProgramAccountQuery() {
 }
 
 
-export async function useCreateAuraAccount(
+export async function processTransaction(
   signer: TransactionSigner,
   client: SolanaClient,
   instructions: Instruction[]
@@ -60,7 +60,7 @@ export async function useCreateAuraAccount(
 }
 
 
-export async function useGetAuraAccounts(client: SolanaClient, programId: Address) {
+export async function fetchAuraProfiles(client: SolanaClient, programId: Address) {
   const allAccounts = await client.rpc.getProgramAccounts(programId, {
     encoding: "base64",
   }).send();

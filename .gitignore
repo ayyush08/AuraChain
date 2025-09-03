@@ -3,7 +3,7 @@
 # dependencies
 /node_modules/*
 node_modules
-target
+
 /.pnp
 .pnp.*
 .yarn/*
@@ -22,7 +22,7 @@ target
 # production
 /build
 
-target/*
+target/
 # misc
 .DS_Store
 *.pem

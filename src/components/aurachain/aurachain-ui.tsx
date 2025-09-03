@@ -8,7 +8,7 @@ import { ExplorerLink } from '@/components/cluster/cluster-ui'
 import { AppModal } from '../app-modal'
 import { useWalletUiSigner } from '../solana/use-wallet-ui-signer'
 import { Address, getAddressEncoder, getProgramDerivedAddress, getUtf8Encoder } from 'gill'
-import { useAurachainProgramId, useCreateAuraAccount, useGetAuraAccounts } from './aurachain-data-access'
+import { fetchAuraProfiles, processTransaction, useAurachainProgramId } from './aurachain-data-access'
 import { getDecreaseAuraInstruction, getIncreaseAuraInstruction, getInitializeInstructionAsync } from '@project/anchor'
 import { SYSTEM_PROGRAM_ADDRESS } from 'gill/programs'
 import { Card, CardContent } from '../ui/card'
@@ -51,7 +51,7 @@ export function CreateAuraProfile() {
       auraAccount: pda,
     })
 
-    await useCreateAuraAccount(signer, client, [ix])
+    await processTransaction(signer, client, [ix])
     setUsername('')
     setIsModalOpen(false)
   }
@@ -125,7 +125,7 @@ function IncreaseAura({ username, onChange, owner }: { username: string, onChang
     })
 
     // Send tx
-    await useCreateAuraAccount(signer, client, [ix])
+    await processTransaction(signer, client, [ix])
 
     toast.custom((t) => (
       <div className="flex items-center gap-3 bg-gradient-to-b from-green-700/80 to-black/80 text-white p-4 rounded-xl shadow-lg backdrop-blur-md">
@@ -231,7 +231,7 @@ function DecreaseAura({ username, owner, previousAmount, onChange }: { username:
       auraAccount: pda,
       amount: BigInt(amount),
     })
-    await useCreateAuraAccount(signer, client, [ix])
+    await processTransaction(signer, client, [ix])
     setAmount('')
 
     setOpen(false)
@@ -279,7 +279,7 @@ export function DisplayProfiles() {
   const [profiles, setProfiles] = useState<any[]>([])
 
   const refresh = useCallback(async () => {
-    const accounts = await useGetAuraAccounts(client, programId)
+    const accounts = await fetchAuraProfiles(client, programId)
     setProfiles(accounts)
   }, [client, programId])
 
@@ -348,7 +348,7 @@ export function AuraProgram() {
 
 
   const refresh = async () => {
-    const auraProfiles = await useGetAuraAccounts(client, programId)
+    const auraProfiles = await fetchAuraProfiles(client, programId)
     console.log("Fetched aura profiles:", auraProfiles);
     setProfiles(auraProfiles)
   }
