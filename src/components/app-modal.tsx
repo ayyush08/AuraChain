@@ -11,13 +11,13 @@ export function AppModal({
   open,
   onOpenChange,
 }: {
-  children: ReactNode
+  children?: ReactNode
   title: string
   submit?: () => void
   submitDisabled?: boolean
   submitLabel?: string
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
