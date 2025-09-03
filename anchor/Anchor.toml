@@ -6,10 +6,10 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-aurachain = "71AHpFUaCzauR7qZkwYLSCjsj8R6fwhBLLmoG4UKLZ9j"
+aurachain = "8VdwhnxhGCYkKv38VGBMAWxxnz5r2Yp1s41fqCbxps5S"
 
 [programs.devnet]
-aurachain = "71AHpFUaCzauR7qZkwYLSCjsj8R6fwhBLLmoG4UKLZ9j"
+aurachain = "8VdwhnxhGCYkKv38VGBMAWxxnz5r2Yp1s41fqCbxps5S"
 
 [registry]
 url = "https://api.apr.dev"
