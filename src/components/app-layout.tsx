@@ -27,7 +27,7 @@ export function AppLayout({
         </main>
         <AppFooter />
       </div>
-      <Toaster />
+      <Toaster richColors position='top-center' className='z-50 p-0' closeButton duration={3000} expand />
     </ThemeProvider>
   )
 }

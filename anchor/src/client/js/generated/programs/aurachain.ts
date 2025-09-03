@@ -20,11 +20,10 @@ import {
 } from '../instructions';
 
 export const AURACHAIN_PROGRAM_ADDRESS =
-  'JAVuBXeBZqXNtS73azhBDAoYaaAFfo4gWXoZe2e7Jf8H' as Address<'JAVuBXeBZqXNtS73azhBDAoYaaAFfo4gWXoZe2e7Jf8H'>;
+  '71AHpFUaCzauR7qZkwYLSCjsj8R6fwhBLLmoG4UKLZ9j' as Address<'71AHpFUaCzauR7qZkwYLSCjsj8R6fwhBLLmoG4UKLZ9j'>;
 
 export enum AurachainAccount {
   AuraAccount,
-  UsernameRegistry,
 }
 
 export function identifyAurachainAccount(
@@ -41,17 +40,6 @@ export function identifyAurachainAccount(
     )
   ) {
     return AurachainAccount.AuraAccount;
-  }
-  if (
-    containsBytes(
-      data,
-      fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([145, 217, 207, 126, 35, 114, 138, 18])
-      ),
-      0
-    )
-  ) {
-    return AurachainAccount.UsernameRegistry;
   }
   throw new Error(
     'The provided account could not be identified as a aurachain account.'
@@ -107,7 +95,7 @@ export function identifyAurachainInstruction(
 }
 
 export type ParsedAurachainInstruction<
-  TProgram extends string = 'JAVuBXeBZqXNtS73azhBDAoYaaAFfo4gWXoZe2e7Jf8H',
+  TProgram extends string = '71AHpFUaCzauR7qZkwYLSCjsj8R6fwhBLLmoG4UKLZ9j',
 > =
   | ({
       instructionType: AurachainInstruction.DecreaseAura;

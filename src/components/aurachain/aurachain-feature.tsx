@@ -1,5 +1,5 @@
 import { WalletButton } from '../solana/solana-provider'
-import { AurachainCreate, AurachainProgram, AurachainProgramExplorerLink } from './aurachain-ui'
+import { AuraProgramExplorerLink, AuraProgram, CreateAuraProfile } from './aurachain-ui'
 import { AppHero } from '../app-hero'
 import { useWalletUi } from '@wallet-ui/react'
 
@@ -19,14 +19,10 @@ export default function AurachainFeature() {
   }
 
   return (
+      <AppHero title="Aurachain" >
     <div>
-      <AppHero title="Aurachain" subtitle={'Run the program by clicking the "Run program" button.'}>
-        <p className="mb-6">
-          <AurachainProgramExplorerLink />
-        </p>
-        <AurachainCreate />
-      </AppHero>
-      <AurachainProgram />
+      <AuraProgram />
     </div>
+      </AppHero>
   )
 }

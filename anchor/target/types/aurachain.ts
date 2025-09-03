@@ -43,6 +43,11 @@ export type Aurachain = {
               {
                 "kind": "account",
                 "path": "user"
+              },
+              {
+                "kind": "account",
+                "path": "aura_account.username",
+                "account": "auraAccount"
               }
             ]
           }
@@ -90,6 +95,11 @@ export type Aurachain = {
               {
                 "kind": "account",
                 "path": "user"
+              },
+              {
+                "kind": "account",
+                "path": "aura_account.username",
+                "account": "auraAccount"
               }
             ]
           }
@@ -137,6 +147,10 @@ export type Aurachain = {
               {
                 "kind": "account",
                 "path": "user"
+              },
+              {
+                "kind": "arg",
+                "path": "username"
               }
             ]
           }

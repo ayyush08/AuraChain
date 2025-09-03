@@ -28,7 +28,7 @@ pub struct InitializeContext<'info> {
         init,
         payer = user,
         space = 8 + AuraAccount::INIT_SPACE,
-        seeds = [b"aura", user.key().as_ref()],
+        seeds = [b"aura", user.key().as_ref(),username.as_bytes()],
         bump
     )]
     pub aura_account: Account<'info, AuraAccount>,

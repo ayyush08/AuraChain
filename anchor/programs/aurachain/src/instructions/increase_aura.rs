@@ -34,7 +34,7 @@ pub fn _increase_aura(ctx: Context<IncreaseAuraContext>, amount: u64) -> Result<
 pub struct IncreaseAuraContext<'info> {
     #[account(
         mut,
-        seeds = [b"aura", user.key().as_ref()],
+        seeds = [b"aura", user.key().as_ref(),aura_account.username.as_bytes()],
         bump
         
     )]

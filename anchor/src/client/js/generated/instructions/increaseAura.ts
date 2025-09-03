@@ -10,10 +10,8 @@ import {
   combineCodec,
   fixDecoderSize,
   fixEncoderSize,
-  getAddressEncoder,
   getBytesDecoder,
   getBytesEncoder,
-  getProgramDerivedAddress,
   getStructDecoder,
   getStructEncoder,
   getU64Decoder,
@@ -34,11 +32,7 @@ import {
   type WritableSignerAccount,
 } from 'gill';
 import { AURACHAIN_PROGRAM_ADDRESS } from '../programs';
-import {
-  expectAddress,
-  getAccountMetaFactory,
-  type ResolvedAccount,
-} from '../shared';
+import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
 
 export const INCREASE_AURA_DISCRIMINATOR = new Uint8Array([
   59, 15, 155, 251, 37, 233, 54, 151,
@@ -101,71 +95,6 @@ export function getIncreaseAuraInstructionDataCodec(): FixedSizeCodec<
     getIncreaseAuraInstructionDataEncoder(),
     getIncreaseAuraInstructionDataDecoder()
   );
-}
-
-export type IncreaseAuraAsyncInput<
-  TAccountAuraAccount extends string = string,
-  TAccountUser extends string = string,
-> = {
-  auraAccount?: Address<TAccountAuraAccount>;
-  user: TransactionSigner<TAccountUser>;
-  amount: IncreaseAuraInstructionDataArgs['amount'];
-};
-
-export async function getIncreaseAuraInstructionAsync<
-  TAccountAuraAccount extends string,
-  TAccountUser extends string,
-  TProgramAddress extends Address = typeof AURACHAIN_PROGRAM_ADDRESS,
->(
-  input: IncreaseAuraAsyncInput<TAccountAuraAccount, TAccountUser>,
-  config?: { programAddress?: TProgramAddress }
-): Promise<
-  IncreaseAuraInstruction<TProgramAddress, TAccountAuraAccount, TAccountUser>
-> {
-  // Program address.
-  const programAddress = config?.programAddress ?? AURACHAIN_PROGRAM_ADDRESS;
-
-  // Original accounts.
-  const originalAccounts = {
-    auraAccount: { value: input.auraAccount ?? null, isWritable: true },
-    user: { value: input.user ?? null, isWritable: true },
-  };
-  const accounts = originalAccounts as Record<
-    keyof typeof originalAccounts,
-    ResolvedAccount
-  >;
-
-  // Original args.
-  const args = { ...input };
-
-  // Resolve default values.
-  if (!accounts.auraAccount.value) {
-    accounts.auraAccount.value = await getProgramDerivedAddress({
-      programAddress,
-      seeds: [
-        getBytesEncoder().encode(new Uint8Array([97, 117, 114, 97])),
-        getAddressEncoder().encode(expectAddress(accounts.user.value)),
-      ],
-    });
-  }
-
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
-  const instruction = {
-    accounts: [
-      getAccountMeta(accounts.auraAccount),
-      getAccountMeta(accounts.user),
-    ],
-    programAddress,
-    data: getIncreaseAuraInstructionDataEncoder().encode(
-      args as IncreaseAuraInstructionDataArgs
-    ),
-  } as IncreaseAuraInstruction<
-    TProgramAddress,
-    TAccountAuraAccount,
-    TAccountUser
-  >;
-
-  return instruction;
 }
 
 export type IncreaseAuraInput<

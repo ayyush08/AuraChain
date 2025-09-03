@@ -55,14 +55,14 @@ export function getAuraAccountDiscriminatorBytes() {
 
 export type AuraAccount = {
   discriminator: ReadonlyUint8Array;
-  username: string;
   owner: Address;
+  username: string;
   auraPoints: bigint;
 };
 
 export type AuraAccountArgs = {
-  username: string;
   owner: Address;
+  username: string;
   auraPoints: number | bigint;
 };
 
@@ -70,8 +70,8 @@ export function getAuraAccountEncoder(): Encoder<AuraAccountArgs> {
   return transformEncoder(
     getStructEncoder([
       ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['username', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
       ['owner', getAddressEncoder()],
+      ['username', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
       ['auraPoints', getU64Encoder()],
     ]),
     (value) => ({ ...value, discriminator: AURA_ACCOUNT_DISCRIMINATOR })
@@ -81,8 +81,8 @@ export function getAuraAccountEncoder(): Encoder<AuraAccountArgs> {
 export function getAuraAccountDecoder(): Decoder<AuraAccount> {
   return getStructDecoder([
     ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['username', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
     ['owner', getAddressDecoder()],
+    ['username', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
     ['auraPoints', getU64Decoder()],
   ]);
 }

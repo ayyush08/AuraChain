@@ -30,6 +30,8 @@ export const AURACHAIN_ERROR__INVALID_AURA_AMOUNT = 0x1775; // 6005
 export const AURACHAIN_ERROR__OVERFLOW = 0x1776; // 6006
 /** InsufficientAura: Not enough aura points. */
 export const AURACHAIN_ERROR__INSUFFICIENT_AURA = 0x1777; // 6007
+/** UsernameAlreadyClaimed: Username already claimed. */
+export const AURACHAIN_ERROR__USERNAME_ALREADY_CLAIMED = 0x1778; // 6008
 
 export type AurachainError =
   | typeof AURACHAIN_ERROR__INSUFFICIENT_AURA
@@ -39,6 +41,7 @@ export type AurachainError =
   | typeof AURACHAIN_ERROR__OVERFLOW
   | typeof AURACHAIN_ERROR__SELF_AURA_NOT_ALLOWED
   | typeof AURACHAIN_ERROR__UNAUTHORIZED
+  | typeof AURACHAIN_ERROR__USERNAME_ALREADY_CLAIMED
   | typeof AURACHAIN_ERROR__USERNAME_TOO_LONG;
 
 let aurachainErrorMessages: Record<AurachainError, string> | undefined;
@@ -51,6 +54,7 @@ if (process.env.NODE_ENV !== 'production') {
     [AURACHAIN_ERROR__OVERFLOW]: `Overflow occurred while updating aura.`,
     [AURACHAIN_ERROR__SELF_AURA_NOT_ALLOWED]: `You cannot increase/decrease your own aura`,
     [AURACHAIN_ERROR__UNAUTHORIZED]: `You are not authorized to perform this action.`,
+    [AURACHAIN_ERROR__USERNAME_ALREADY_CLAIMED]: `Username already claimed.`,
     [AURACHAIN_ERROR__USERNAME_TOO_LONG]: `Username too long`,
   };
 }

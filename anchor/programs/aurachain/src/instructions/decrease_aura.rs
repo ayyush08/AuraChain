@@ -40,7 +40,7 @@ pub fn _decrease_aura(ctx: Context<DecreaseAuraContext>, amount: u64) -> Result<
 pub struct DecreaseAuraContext<'info> {
     #[account(
         mut,
-        seeds = [b"aura", user.key().as_ref()],
+        seeds = [b"aura", user.key().as_ref(),aura_account.username.as_bytes()],
         bump,
     )]
     pub aura_account: Account<'info, AuraAccount>,

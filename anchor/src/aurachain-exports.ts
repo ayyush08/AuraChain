@@ -13,7 +13,7 @@ export function getAurachainProgramId(cluster: SolanaClusterId) {
     case 'solana:devnet':
     case 'solana:testnet':
       // This is the program ID for the Aurachain program on devnet and testnet.
-      return address('6z68wfurCMYkZG51s1Et9BJEd9nJGUusjHXNt4dGbNNF')
+      return address('71AHpFUaCzauR7qZkwYLSCjsj8R6fwhBLLmoG4UKLZ9j')
     case 'solana:mainnet':
     default:
       return AURACHAIN_PROGRAM_ADDRESS

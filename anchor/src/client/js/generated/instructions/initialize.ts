@@ -57,7 +57,6 @@ export function getInitializeDiscriminatorBytes() {
 export type InitializeInstruction<
   TProgram extends string = typeof AURACHAIN_PROGRAM_ADDRESS,
   TAccountAuraAccount extends string | AccountMeta<string> = string,
-  TAccountUsernameRegistry extends string | AccountMeta<string> = string,
   TAccountUser extends string | AccountMeta<string> = string,
   TAccountSystemProgram extends
     | string
@@ -70,9 +69,6 @@ export type InitializeInstruction<
       TAccountAuraAccount extends string
         ? WritableAccount<TAccountAuraAccount>
         : TAccountAuraAccount,
-      TAccountUsernameRegistry extends string
-        ? WritableAccount<TAccountUsernameRegistry>
-        : TAccountUsernameRegistry,
       TAccountUser extends string
         ? WritableSignerAccount<TAccountUser> & AccountSignerMeta<TAccountUser>
         : TAccountUser,
@@ -119,12 +115,10 @@ export function getInitializeInstructionDataCodec(): Codec<
 
 export type InitializeAsyncInput<
   TAccountAuraAccount extends string = string,
-  TAccountUsernameRegistry extends string = string,
   TAccountUser extends string = string,
   TAccountSystemProgram extends string = string,
 > = {
   auraAccount?: Address<TAccountAuraAccount>;
-  usernameRegistry?: Address<TAccountUsernameRegistry>;
   user: TransactionSigner<TAccountUser>;
   systemProgram?: Address<TAccountSystemProgram>;
   username: InitializeInstructionDataArgs['username'];
@@ -132,14 +126,12 @@ export type InitializeAsyncInput<
 
 export async function getInitializeInstructionAsync<
   TAccountAuraAccount extends string,
-  TAccountUsernameRegistry extends string,
   TAccountUser extends string,
   TAccountSystemProgram extends string,
   TProgramAddress extends Address = typeof AURACHAIN_PROGRAM_ADDRESS,
 >(
   input: InitializeAsyncInput<
     TAccountAuraAccount,
-    TAccountUsernameRegistry,
     TAccountUser,
     TAccountSystemProgram
   >,
@@ -148,7 +140,6 @@ export async function getInitializeInstructionAsync<
   InitializeInstruction<
     TProgramAddress,
     TAccountAuraAccount,
-    TAccountUsernameRegistry,
     TAccountUser,
     TAccountSystemProgram
   >
@@ -159,10 +150,6 @@ export async function getInitializeInstructionAsync<
   // Original accounts.
   const originalAccounts = {
     auraAccount: { value: input.auraAccount ?? null, isWritable: true },
-    usernameRegistry: {
-      value: input.usernameRegistry ?? null,
-      isWritable: true,
-    },
     user: { value: input.user ?? null, isWritable: true },
     systemProgram: { value: input.systemProgram ?? null, isWritable: false },
   };
@@ -181,16 +168,6 @@ export async function getInitializeInstructionAsync<
       seeds: [
         getBytesEncoder().encode(new Uint8Array([97, 117, 114, 97])),
         getAddressEncoder().encode(expectAddress(accounts.user.value)),
-      ],
-    });
-  }
-  if (!accounts.usernameRegistry.value) {
-    accounts.usernameRegistry.value = await getProgramDerivedAddress({
-      programAddress,
-      seeds: [
-        getBytesEncoder().encode(
-          new Uint8Array([117, 115, 101, 114, 110, 97, 109, 101])
-        ),
         addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder()).encode(
           expectSome(args.username)
         ),
@@ -206,7 +183,6 @@ export async function getInitializeInstructionAsync<
   const instruction = {
     accounts: [
       getAccountMeta(accounts.auraAccount),
-      getAccountMeta(accounts.usernameRegistry),
       getAccountMeta(accounts.user),
       getAccountMeta(accounts.systemProgram),
     ],
@@ -217,7 +193,6 @@ export async function getInitializeInstructionAsync<
   } as InitializeInstruction<
     TProgramAddress,
     TAccountAuraAccount,
-    TAccountUsernameRegistry,
     TAccountUser,
     TAccountSystemProgram
   >;
@@ -227,12 +202,10 @@ export async function getInitializeInstructionAsync<
 
 export type InitializeInput<
   TAccountAuraAccount extends string = string,
-  TAccountUsernameRegistry extends string = string,
   TAccountUser extends string = string,
   TAccountSystemProgram extends string = string,
 > = {
   auraAccount: Address<TAccountAuraAccount>;
-  usernameRegistry: Address<TAccountUsernameRegistry>;
   user: TransactionSigner<TAccountUser>;
   systemProgram?: Address<TAccountSystemProgram>;
   username: InitializeInstructionDataArgs['username'];
@@ -240,14 +213,12 @@ export type InitializeInput<
 
 export function getInitializeInstruction<
   TAccountAuraAccount extends string,
-  TAccountUsernameRegistry extends string,
   TAccountUser extends string,
   TAccountSystemProgram extends string,
   TProgramAddress extends Address = typeof AURACHAIN_PROGRAM_ADDRESS,
 >(
   input: InitializeInput<
     TAccountAuraAccount,
-    TAccountUsernameRegistry,
     TAccountUser,
     TAccountSystemProgram
   >,
@@ -255,7 +226,6 @@ export function getInitializeInstruction<
 ): InitializeInstruction<
   TProgramAddress,
   TAccountAuraAccount,
-  TAccountUsernameRegistry,
   TAccountUser,
   TAccountSystemProgram
 > {
@@ -265,10 +235,6 @@ export function getInitializeInstruction<
   // Original accounts.
   const originalAccounts = {
     auraAccount: { value: input.auraAccount ?? null, isWritable: true },
-    usernameRegistry: {
-      value: input.usernameRegistry ?? null,
-      isWritable: true,
-    },
     user: { value: input.user ?? null, isWritable: true },
     systemProgram: { value: input.systemProgram ?? null, isWritable: false },
   };
@@ -290,7 +256,6 @@ export function getInitializeInstruction<
   const instruction = {
     accounts: [
       getAccountMeta(accounts.auraAccount),
-      getAccountMeta(accounts.usernameRegistry),
       getAccountMeta(accounts.user),
       getAccountMeta(accounts.systemProgram),
     ],
@@ -301,7 +266,6 @@ export function getInitializeInstruction<
   } as InitializeInstruction<
     TProgramAddress,
     TAccountAuraAccount,
-    TAccountUsernameRegistry,
     TAccountUser,
     TAccountSystemProgram
   >;
@@ -316,9 +280,8 @@ export type ParsedInitializeInstruction<
   programAddress: Address<TProgram>;
   accounts: {
     auraAccount: TAccountMetas[0];
-    usernameRegistry: TAccountMetas[1];
-    user: TAccountMetas[2];
-    systemProgram: TAccountMetas[3];
+    user: TAccountMetas[1];
+    systemProgram: TAccountMetas[2];
   };
   data: InitializeInstructionData;
 };
@@ -331,7 +294,7 @@ export function parseInitializeInstruction<
     InstructionWithAccounts<TAccountMetas> &
     InstructionWithData<ReadonlyUint8Array>
 ): ParsedInitializeInstruction<TProgram, TAccountMetas> {
-  if (instruction.accounts.length < 4) {
+  if (instruction.accounts.length < 3) {
     // TODO: Coded error.
     throw new Error('Not enough accounts');
   }
@@ -345,7 +308,6 @@ export function parseInitializeInstruction<
     programAddress: instruction.programAddress,
     accounts: {
       auraAccount: getNextAccount(),
-      usernameRegistry: getNextAccount(),
       user: getNextAccount(),
       systemProgram: getNextAccount(),
     },

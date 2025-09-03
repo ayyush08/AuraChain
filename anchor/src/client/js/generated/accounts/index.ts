@@ -7,4 +7,3 @@
  */
 
 export * from './auraAccount';
-export * from './usernameRegistry';

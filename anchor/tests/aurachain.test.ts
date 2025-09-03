@@ -14,12 +14,16 @@ describe('aurachain aura points', () => {
     await provider.connection.confirmTransaction(sig, 'confirmed');
   }
 
-  function getAuraPda(user: PublicKey) {
-    return PublicKey.findProgramAddressSync([Buffer.from('aura'), user.toBuffer()], program.programId);
+  // ✅ PDA derivation now includes username
+  function getAuraPda(user: PublicKey, username: string) {
+    return PublicKey.findProgramAddressSync(
+      [Buffer.from('aura'), user.toBuffer(), Buffer.from(username)],
+      program.programId
+    );
   }
 
   async function initAura(user: anchor.web3.Keypair, username: string) {
-    const [auraPda] = getAuraPda(user.publicKey);
+    const [auraPda] = getAuraPda(user.publicKey, username);
 
     await program.methods
       .initialize(username)
@@ -37,13 +41,15 @@ describe('aurachain aura points', () => {
 
   it('increase aura works normally', async () => {
     const user = anchor.web3.Keypair.generate();
+    const username = `alice-${Date.now()}`;
     await airdrop(user.publicKey, 2 * LAMPORTS_PER_SOL);
-    const auraPda = await initAura(user, `alice-${Date.now()}`);
+    const auraPda = await initAura(user, username);
 
     await program.methods.increaseAura(new anchor.BN(10))
       .accounts({
         //@ts-ignore
-        auraAccount: auraPda, user: user.publicKey
+        auraAccount: auraPda,
+        user: user.publicKey,
       })
       .signers([user])
       .rpc();
@@ -54,14 +60,16 @@ describe('aurachain aura points', () => {
 
   it('fails when increasing by zero', async () => {
     const user = anchor.web3.Keypair.generate();
+    const username = `bob-${Date.now()}`;
     await airdrop(user.publicKey, 2 * LAMPORTS_PER_SOL);
-    const auraPda = await initAura(user, `bob-${Date.now()}`);
+    const auraPda = await initAura(user, username);
 
     try {
       await program.methods.increaseAura(new anchor.BN(0))
         .accounts({
           //@ts-ignore
-          aauraAccount: auraPda, user: user.publicKey
+          auraAccount: auraPda,
+          user: user.publicKey,
         })
         .signers([user])
         .rpc();
@@ -74,14 +82,16 @@ describe('aurachain aura points', () => {
 
   it('decrease aura works normally', async () => {
     const user = anchor.web3.Keypair.generate();
+    const username = `charlie-${Date.now()}`;
     await airdrop(user.publicKey, 2 * LAMPORTS_PER_SOL);
-    const auraPda = await initAura(user, `charlie-${Date.now()}`);
+    const auraPda = await initAura(user, username);
 
     // Increase first
     await program.methods.increaseAura(new anchor.BN(20))
       .accounts({
         //@ts-ignore
-        auraAccount: auraPda, user: user.publicKey
+        auraAccount: auraPda,
+        user: user.publicKey,
       })
       .signers([user])
       .rpc();
@@ -90,7 +100,8 @@ describe('aurachain aura points', () => {
     await program.methods.decreaseAura(new anchor.BN(7))
       .accounts({
         //@ts-ignore
-        auraAccount: auraPda, user: user.publicKey
+        auraAccount: auraPda,
+        user: user.publicKey,
       })
       .signers([user])
       .rpc();
@@ -101,13 +112,15 @@ describe('aurachain aura points', () => {
 
   it('fails when decreasing more than balance', async () => {
     const user = anchor.web3.Keypair.generate();
+    const username = `dave-${Date.now()}`;
     await airdrop(user.publicKey, 2 * LAMPORTS_PER_SOL);
-    const auraPda = await initAura(user, `dave-${Date.now()}`);
+    const auraPda = await initAura(user, username);
 
     await program.methods.increaseAura(new anchor.BN(5))
       .accounts({
         //@ts-ignore
-        auraAccount: auraPda, user: user.publicKey
+        auraAccount: auraPda,
+        user: user.publicKey,
       })
       .signers([user])
       .rpc();
@@ -116,7 +129,8 @@ describe('aurachain aura points', () => {
       await program.methods.decreaseAura(new anchor.BN(10))
         .accounts({
           //@ts-ignore
-          auraAccount: auraPda, user: user.publicKey
+          auraAccount: auraPda,
+          user: user.publicKey,
         })
         .signers([user])
         .rpc();
@@ -129,14 +143,16 @@ describe('aurachain aura points', () => {
 
   it('fails when decreasing zero', async () => {
     const user = anchor.web3.Keypair.generate();
+    const username = `eve-${Date.now()}`;
     await airdrop(user.publicKey, 2 * LAMPORTS_PER_SOL);
-    const auraPda = await initAura(user, `eve-${Date.now()}`);
+    const auraPda = await initAura(user, username);
 
     try {
       await program.methods.decreaseAura(new anchor.BN(0))
         .accounts({
           //@ts-ignore
-          auraAccount: auraPda, user: user.publicKey
+          auraAccount: auraPda,
+          user: user.publicKey,
         })
         .signers([user])
         .rpc();
